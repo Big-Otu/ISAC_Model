@@ -1,0 +1,19 @@
+# Secrets / env files
+.env
+*.env
+*api-key*
+*.pem
+*.key
+
+# Docker volumes / data
+misp-docker/
+**/misp-docker/
+
+# OS/editor junk
+.DS_Store
+Thumbs.db
+*.log
+
+# Large captures
+*.pcap
+*.pcapng
