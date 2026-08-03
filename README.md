@@ -1,96 +1,87 @@
-\# Designing a Threat Intelligence Sharing Process with Industry Peers (ISAC Model)
+# SectorShare — ISAC Threat Intelligence Sharing Process
 
+**CY376: Network Monitoring, Security and Auditing — End-of-Semester Project**
+**Team:** Blue Team
+**Topic:** Designing a Threat Intelligence Sharing Process with Industry Peers (ISAC Model)
+**Author:**   Otu Aboah Dennis— Index Number: FCM.41.018.223.23
+**Institution:** University of Mines and Technology (UMaT), Tarkwa
+**Contact:** cy-dotu1123@st.umat.edu.gh
 
+## Summary
 
-\*\*Course:\*\* CY376 – Network Monitoring, Security and Auditing
+This project designs a complete threat intelligence sharing process modelled on the
+Information Sharing and Analysis Center (ISAC) framework, adapted to Ghana's
+cybersecurity governance structure under the Cybersecurity Act, 2020 (Act 1038) and
+the Cyber Security Authority (CSA) / National CERT-GH sectoral CERT structure.
 
-\*\*Team:\*\* Blue Team
+The design covers three layers:
 
-\*\*Author:\*\* Otu Aboah Dennis — FCM.41.018.223.23
+- **Governance** — membership charter, sharing agreement, and a dispute/escalation
+  path anchored under CERT-GH oversight.
+- **Classification** — [Traffic Light Protocol (TLP) 2.0](https://www.first.org/tlp/)
+  for controlling how far a shared item may travel.
+- **Technical exchange** — [STIX 2.1](https://docs.oasis-open.org/cti/stix/v2.1/stix-v2.1.html)
+  indicator objects, intended for transport over
+  [TAXII 2.1](https://docs.oasis-open.org/cti/taxii/v2.1/taxii-v2.1.html).
 
+A working prototype, **SectorShare**, implements the full submission → validation →
+TLP-tagging → anonymization → publication pipeline for four simulated member sectors
+(Banking, Health, Energy, Telecom), and generates real STIX 2.1 indicator bundles.
 
+## Repository Structure
 
-\## Summary
+```
+├── src/
+│   └── index.html          # SectorShare prototype (self-contained HTML/CSS/JS app)
+├── docs/
+│   ├── CY376_ISAC_Report.pdf     # Final submitted report (PDF copy)
+│   ├── architecture-diagram.png  # ISAC information-flow diagram (Figure 1 in report)
+│   └── sample-bundle.json        # Example STIX 2.1 indicator bundle output
+├── scripts/
+│   ├── generate-report.js        # Node/docx-js script used to build the report
+│   └── architecture-diagram.svg  # Source SVG for the architecture diagram
+├── evidence/
+│   └── (screenshots referenced as Figures 2–6 in the report)
+├── .gitignore
+└── README.md
+```
 
+## Running the Prototype
 
+No build step or server required.
 
-This project designs a threat intelligence sharing process modelled on the
+1. Clone the repository.
+2. Open `src/index.html` directly in any modern browser (Chrome, Edge, Firefox).
+3. Select a member organization, an indicator type, a threat category, and a TLP
+   marking, then click **Submit to ISAC**.
+4. Watch the pipeline run through Submitted → Validated → TLP-Tagged → Anonymized →
+   Published, and inspect the generated STIX 2.1 bundle and the live shared feed.
 
-Information Sharing and Analysis Center (ISAC) framework, and validates the
+## Tools and Standards Used
 
-design with a two-organisation proof-of-concept built on MISP (Malware
+- HTML5 / CSS3 / JavaScript (prototype)
+- [Traffic Light Protocol (TLP) 2.0](https://www.first.org/tlp/) — FIRST.org
+- [STIX 2.1](https://docs.oasis-open.org/cti/stix/v2.1/stix-v2.1.html) /
+  [TAXII 2.1](https://docs.oasis-open.org/cti/taxii/v2.1/taxii-v2.1.html) — OASIS
+- [MITRE ATT&CK](https://attack.mitre.org/) — referenced for indicator enrichment
+- Node.js + [docx](https://www.npmjs.com/package/docx) — report generation
+- Ghana Cybersecurity Act, 2020 (Act 1038) — governance framework
 
-Information Sharing Platform). Two independent MISP instances, representing
+## Screenshots
 
-two ISAC member organisations, are deployed via Docker and connected through
+See `docs/CY376_ISAC_Report.pdf`, Section 4 (Implementation), Figures 2–6, for
+annotated screenshots of the prototype pipeline, generated STIX bundles at each TLP
+level, and the resulting shared feed. Raw screenshot files are stored in `/evidence`.
 
-a sync relationship to demonstrate the full intelligence lifecycle: submission,
+## Report
 
-TLP classification, dissemination, and sighting feedback.
+The full report, covering background, literature review, methodology, implementation,
+results, analysis, and recommendations for a real Ghanaian ISAC deployment, is at
+[`docs/CY376_ISAC_Report.pdf`](docs/CY376_ISAC_Report.pdf).
 
+## Scope Note
 
-
-The full design rationale, literature review, and analysis are in the written
-
-report: \[`docs/report/CY376\_ISAC\_Project\_Report.pdf`](docs/report/CY376\_ISAC\_Project\_Report.pdf)
-
-
-
-\## Tools Used
-
-
-
-\- \*\*MISP\*\* (Malware Information Sharing Platform) — official `misp-docker` deployment
-
-\- \*\*Docker / Docker Compose\*\* — container orchestration
-
-\- \*\*TLP taxonomy\*\* (built into MISP) — classification of shared intelligence
-
-\- \*\*MITRE ATT\&CK galaxy\*\* (built into MISP) — adversary technique tagging
-
-\- \[ADD ANYTHING ELSE YOU ACTUALLY USE]
-
-
-
-\## How to Run This Lab
-
-
-
-1\. Clone this repo.
-
-2\. For each simulated member organisation, clone the official MISP Docker project separately (kept outside this repo for security — see `.gitignore`):
-
-
-
-
-
-3\. Copy `configs/org-a.env.example` and `configs/org-b.env.example` into each respective `misp-docker` folder as `.env`, then fill in your own passwords (never commit real `.env` files).
-
-4\. Run `docker compose up -d` in each.
-
-5\. Access Org A at `https://localhost:8443` and Org B at `https://localhost:8444`.
-
-6\. Follow the sync setup steps documented in `docs/lab-steps.md`.
-
-
-
-\## Repository Structure
-
-
-
-\- `docs/` — report (PDF), lab setup notes, diagrams
-
-\- `configs/` — sanitised example `.env` files, sync configuration notes (no real secrets)
-
-\- `scripts/` — any automation/helper scripts used
-
-\- `evidence/` — screenshots and logs captured from the lab (referenced in the report)
-
-
-
-\## Screenshots
-
-
-
-See `evidence/` folder, referenced by figure number in the written report.
-
+All member organizations (Aegis Regional Bank, Meridian Health Network, Coastal
+Energy Co-op, Vantage Telecom) are fictional, and all indicator data used in testing
+is synthetic. No real systems, networks, or third-party data were accessed or used
+in this project.

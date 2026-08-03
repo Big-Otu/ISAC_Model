@@ -1,19 +1,28 @@
-# Secrets / env files
-.env
-*.env
-*api-key*
-*.pem
-*.key
-
-# Docker volumes / data
-misp-docker/
-**/misp-docker/
-
-# OS/editor junk
+# OS junk
 .DS_Store
 Thumbs.db
-*.log
 
-# Large captures
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+
+# Node (in case report script dependencies are ever added locally)
+node_modules/
+npm-debug.log*
+
+# Environment / secrets — never commit these
+.env
+.env.*
+*.pem
+*.key
+credentials*
+secrets*
+
+# Large raw capture files (add exceptions in /evidence as needed, keep only final PNGs/JPGs)
 *.pcap
 *.pcapng
+
+# Temp / working files
+*.tmp
+~$*
