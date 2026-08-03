@@ -1,0 +1,100 @@
+<svg width="1400" height="820" viewBox="0 0 1400 820" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#3B4656"/>
+    </marker>
+  </defs>
+  <rect width="1400" height="820" fill="#FFFFFF"/>
+
+  <!-- Oversight layer -->
+  <rect x="430" y="30" width="540" height="70" rx="8" fill="#EEF2F7" stroke="#B9C4D4" stroke-width="1.5"/>
+  <text x="700" y="58" font-family="Arial" font-size="17" font-weight="bold" text-anchor="middle" fill="#1F2937">Cyber Security Authority (CSA) / National CERT-GH</text>
+  <text x="700" y="80" font-family="Arial" font-size="13" text-anchor="middle" fill="#4B5563">Regulatory oversight under the Cybersecurity Act, 2020 (Act 1038)</text>
+  <line x1="700" y1="100" x2="700" y2="140" stroke="#B9C4D4" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Member orgs row -->
+  <g font-family="Arial">
+    <!-- Bank -->
+    <rect x="60" y="150" width="220" height="90" rx="8" fill="#F5FAF8" stroke="#3DAE7C" stroke-width="1.5"/>
+    <text x="170" y="185" font-size="15" font-weight="bold" text-anchor="middle" fill="#1F2937">Banking Sector</text>
+    <text x="170" y="205" font-size="12" text-anchor="middle" fill="#4B5563">Member Organization</text>
+    <text x="170" y="222" font-size="11" text-anchor="middle" fill="#6B7280">(Bank of Ghana SOC)</text>
+
+    <!-- Health -->
+    <rect x="320" y="150" width="220" height="90" rx="8" fill="#F5FAF8" stroke="#3DAE7C" stroke-width="1.5"/>
+    <text x="430" y="185" font-size="15" font-weight="bold" text-anchor="middle" fill="#1F2937">Health Sector</text>
+    <text x="430" y="205" font-size="12" text-anchor="middle" fill="#4B5563">Member Organization</text>
+    <text x="430" y="222" font-size="11" text-anchor="middle" fill="#6B7280">(Sectoral CERT)</text>
+
+    <!-- Energy -->
+    <rect x="580" y="150" width="220" height="90" rx="8" fill="#F5FAF8" stroke="#3DAE7C" stroke-width="1.5"/>
+    <text x="690" y="185" font-size="15" font-weight="bold" text-anchor="middle" fill="#1F2937">Energy Sector</text>
+    <text x="690" y="205" font-size="12" text-anchor="middle" fill="#4B5563">Member Organization</text>
+    <text x="690" y="222" font-size="11" text-anchor="middle" fill="#6B7280">(Sectoral CERT)</text>
+
+    <!-- Telecom -->
+    <rect x="840" y="150" width="220" height="90" rx="8" fill="#F5FAF8" stroke="#3DAE7C" stroke-width="1.5"/>
+    <text x="950" y="185" font-size="15" font-weight="bold" text-anchor="middle" fill="#1F2937">Telecom Sector</text>
+    <text x="950" y="205" font-size="12" text-anchor="middle" fill="#4B5563">Member Organization</text>
+    <text x="950" y="222" font-size="11" text-anchor="middle" fill="#6B7280">(Sectoral CERT)</text>
+
+    <!-- Other / future -->
+    <rect x="1100" y="150" width="220" height="90" rx="8" fill="#F8F8F5" stroke="#C7C2A8" stroke-width="1.5" stroke-dasharray="5,3"/>
+    <text x="1210" y="185" font-size="15" font-weight="bold" text-anchor="middle" fill="#4B5563">Additional Sectors</text>
+    <text x="1210" y="205" font-size="12" text-anchor="middle" fill="#6B7280">Future Members</text>
+    <text x="1210" y="222" font-size="11" text-anchor="middle" fill="#9CA3AF">(Phased onboarding)</text>
+  </g>
+
+  <!-- Down arrows to hub -->
+  <line x1="170" y1="240" x2="450" y2="330" stroke="#3B4656" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="430" y1="240" x2="530" y2="330" stroke="#3B4656" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="690" y1="240" x2="640" y2="330" stroke="#3B4656" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="950" y1="240" x2="720" y2="330" stroke="#3B4656" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ISAC Hub -->
+  <rect x="360" y="335" width="680" height="220" rx="10" fill="#0F1B14" stroke="#1F3D2C" stroke-width="2"/>
+  <text x="700" y="368" font-family="Arial" font-size="19" font-weight="bold" text-anchor="middle" fill="#FFFFFF">Ghana Sector-Wide ISAC Hub — "SectorShare"</text>
+
+  <!-- pipeline stages inside hub -->
+  <g font-family="Arial" font-size="12.5" fill="#0F1B14">
+    <rect x="385" y="395" width="118" height="55" rx="6" fill="#D7ECE0"/>
+    <text x="444" y="418" text-anchor="middle" font-weight="bold">1. Submit</text>
+    <text x="444" y="435" text-anchor="middle" font-size="10.5">Member IOC intake</text>
+
+    <rect x="518" y="395" width="118" height="55" rx="6" fill="#D7ECE0"/>
+    <text x="577" y="418" text-anchor="middle" font-weight="bold">2. Validate</text>
+    <text x="577" y="435" text-anchor="middle" font-size="10.5">Dedup / QA check</text>
+
+    <rect x="651" y="395" width="118" height="55" rx="6" fill="#D7ECE0"/>
+    <text x="710" y="418" text-anchor="middle" font-weight="bold">3. TLP-Tag</text>
+    <text x="710" y="435" text-anchor="middle" font-size="10.5">Apply TLP 2.0 rule</text>
+
+    <rect x="784" y="395" width="118" height="55" rx="6" fill="#D7ECE0"/>
+    <text x="843" y="418" text-anchor="middle" font-weight="bold">4. Anonymize</text>
+    <text x="843" y="435" text-anchor="middle" font-size="10.5">Per TLP:AMBER rule</text>
+
+    <!-- arrows between stages -->
+    <line x1="503" y1="422" x2="516" y2="422" stroke="#0F1B14" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="636" y1="422" x2="649" y2="422" stroke="#0F1B14" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="769" y1="422" x2="782" y2="422" stroke="#0F1B14" stroke-width="1.5" marker-end="url(#arrow)"/>
+  </g>
+
+  <text x="700" y="475" font-family="Arial" font-size="12.5" text-anchor="middle" fill="#9FD8B8">Exchange format: STIX 2.1 indicator bundles · Transport: TAXII 2.1 collections</text>
+  <text x="700" y="495" font-family="Arial" font-size="12.5" text-anchor="middle" fill="#9FD8B8">Enrichment: MITRE ATT&amp;CK technique mapping · Confidence: member sighting feedback</text>
+  <text x="700" y="522" font-family="Arial" font-size="12.5" text-anchor="middle" fill="#E8B34A">Governance layer: membership charter · sharing agreement / NDA · dispute arbitration</text>
+
+  <!-- Feed out -->
+  <line x1="700" y1="555" x2="700" y2="610" stroke="#3B4656" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="480" y="615" width="440" height="70" rx="8" fill="#F5FAF8" stroke="#3DAE7C" stroke-width="1.5"/>
+  <text x="700" y="645" font-family="Arial" font-size="15" font-weight="bold" text-anchor="middle" fill="#1F2937">Shared Threat Feed</text>
+  <text x="700" y="665" font-family="Arial" font-size="12" text-anchor="middle" fill="#4B5563">Distributed back to all member organizations per TLP rule</text>
+
+  <!-- Feed back arrows -->
+  <line x1="500" y1="618" x2="220" y2="245" stroke="#8A93A3" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <line x1="600" y1="618" x2="450" y2="245" stroke="#8A93A3" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <line x1="800" y1="618" x2="720" y2="245" stroke="#8A93A3" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <line x1="900" y1="618" x2="970" y2="245" stroke="#8A93A3" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+
+  <text x="700" y="730" font-family="Arial" font-size="12" text-anchor="middle" fill="#6B7280" font-style="italic">Figure: Proposed sector-wide ISAC information flow — submission, processing, and distribution, under CSA / CERT-GH oversight.</text>
+  <text x="700" y="750" font-family="Arial" font-size="11" text-anchor="middle" fill="#9CA3AF">Solid arrows: submission path. Dashed arrows: distribution path back to members.</text>
+</svg>
