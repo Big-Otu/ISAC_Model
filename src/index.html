@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SectorShare ISAC — Threat Intel Sharing Hub</title>
+<style>
+  :root{
+    --bg:#0A0D12;
+    --panel:#11161F;
+    --panel-2:#161C27;
+    --line:#232B38;
+    --text:#DDE3EC;
+    --muted:#7C8798;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+    --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    --tlp-red:#E5484D;
+    --tlp-red-bg:#2A1416;
+    --tlp-amber:#F2A93B;
+    --tlp-amber-bg:#2A2013;
+    --tlp-green:#3DDC97;
+    --tlp-green-bg:#0F241C;
+    --tlp-clear:#DDE3EC;
+    --tlp-clear-bg:#1A1E26;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    padding:28px;
+    min-height:100vh;
+  }
+  .wrap{max-width:1320px; margin:0 auto;}
+
+  /* Header */
+  header{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    border-bottom:1px solid var(--line);
+    padding-bottom:18px; margin-bottom:22px;
+    flex-wrap:wrap; gap:16px;
+  }
+  .brand{display:flex; align-items:center; gap:12px;}
+  .brand-mark{
+    width:38px; height:38px; border-radius:8px;
+    background:linear-gradient(135deg, var(--tlp-green), #1a8f60);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-weight:700; color:#08110C; font-size:15px;
+  }
+  .brand h1{font-size:19px; font-weight:600; letter-spacing:0.2px;}
+  .brand p{font-size:12px; color:var(--muted); font-family:var(--mono); margin-top:2px;}
+  .stats{display:flex; gap:26px;}
+  .stat{text-align:right;}
+  .stat .n{font-family:var(--mono); font-size:22px; font-weight:600;}
+  .stat .l{font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px; margin-top:2px;}
+
+  /* Layout */
+  .grid{display:grid; grid-template-columns: 340px 1fr 380px; gap:18px;}
+  @media (max-width: 1080px){ .grid{grid-template-columns: 1fr;} }
+
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:18px;
+  }
+  .panel-title{
+    font-size:11px; text-transform:uppercase; letter-spacing:1px;
+    color:var(--muted); font-family:var(--mono);
+    margin-bottom:14px; display:flex; align-items:center; gap:8px;
+  }
+  .panel-title .dot{width:6px; height:6px; border-radius:50%; background:var(--tlp-green);}
+
+  /* Form */
+  label{font-size:11.5px; color:var(--muted); display:block; margin:12px 0 5px;}
+  label:first-of-type{margin-top:0;}
+  select, input{
+    width:100%; background:var(--panel-2); border:1px solid var(--line);
+    color:var(--text); font-family:var(--mono); font-size:13px;
+    padding:9px 10px; border-radius:6px; outline:none;
+  }
+  select:focus, input:focus{border-color:var(--tlp-green);}
+  .tlp-row{display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:5px;}
+  .tlp-btn{
+    padding:8px 4px; border-radius:6px; font-family:var(--mono); font-size:10.5px;
+    text-align:center; border:1px solid var(--line); cursor:pointer; background:var(--panel-2);
+    color:var(--muted); font-weight:600; letter-spacing:0.3px;
+  }
+  .tlp-btn.active[data-tlp="RED"]{background:var(--tlp-red-bg); color:var(--tlp-red); border-color:var(--tlp-red);}
+  .tlp-btn.active[data-tlp="AMBER"]{background:var(--tlp-amber-bg); color:var(--tlp-amber); border-color:var(--tlp-amber);}
+  .tlp-btn.active[data-tlp="GREEN"]{background:var(--tlp-green-bg); color:var(--tlp-green); border-color:var(--tlp-green);}
+  .tlp-btn.active[data-tlp="CLEAR"]{background:var(--tlp-clear-bg); color:var(--tlp-clear); border-color:var(--muted);}
+
+  .submit-btn{
+    width:100%; margin-top:16px; padding:11px; border-radius:6px; border:none;
+    background:var(--tlp-green); color:#08150F; font-weight:700; font-size:13px;
+    cursor:pointer; font-family:var(--sans); letter-spacing:0.2px;
+  }
+  .submit-btn:hover{filter:brightness(1.08);}
+  .hint{font-size:11px; color:var(--muted); margin-top:10px; line-height:1.5;}
+
+  /* Pipeline */
+  .pipeline{display:flex; flex-direction:column; gap:10px; margin-bottom:16px;}
+  .stage{
+    display:flex; align-items:center; gap:12px;
+    padding:12px 14px; border-radius:8px; background:var(--panel-2);
+    border:1px solid var(--line); opacity:0.35; transition:opacity .25s, border-color .25s;
+  }
+  .stage.live{opacity:1; border-color:var(--tlp-green);}
+  .stage .idx{
+    font-family:var(--mono); font-size:11px; color:var(--muted);
+    width:20px; height:20px; border-radius:50%; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .stage.live .idx{border-color:var(--tlp-green); color:var(--tlp-green);}
+  .stage .txt b{font-size:13px; display:block;}
+  .stage .txt span{font-size:11.5px; color:var(--muted);}
+
+  .bundle-box{
+    background:#080B10; border:1px solid var(--line); border-radius:8px;
+    padding:14px; font-family:var(--mono); font-size:11.5px; color:#9FD8B8;
+    white-space:pre-wrap; line-height:1.6; max-height:230px; overflow:auto;
+  }
+  .bundle-box .muted{color:var(--muted);}
+  .empty-note{color:var(--muted); font-size:12.5px; font-family:var(--sans); line-height:1.6;}
+
+  /* Feed */
+  .feed-list{display:flex; flex-direction:column; gap:8px; max-height:640px; overflow:auto;}
+  .feed-item{
+    background:var(--panel-2); border:1px solid var(--line); border-radius:8px; padding:11px 12px;
+    animation: slide-in .35s ease;
+  }
+  @keyframes slide-in{ from{opacity:0; transform:translateY(-6px);} to{opacity:1; transform:translateY(0);} }
+  .feed-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;}
+  .badge{
+    font-family:var(--mono); font-size:9.5px; font-weight:700; padding:2px 7px; border-radius:4px;
+    letter-spacing:0.4px;
+  }
+  .badge.RED{background:var(--tlp-red-bg); color:var(--tlp-red);}
+  .badge.AMBER{background:var(--tlp-amber-bg); color:var(--tlp-amber);}
+  .badge.GREEN{background:var(--tlp-green-bg); color:var(--tlp-green);}
+  .badge.CLEAR{background:var(--tlp-clear-bg); color:var(--tlp-clear);}
+  .feed-time{font-size:10px; color:var(--muted); font-family:var(--mono);}
+  .feed-val{font-family:var(--mono); font-size:12px; word-break:break-all;}
+  .feed-meta{font-size:11px; color:var(--muted); margin-top:5px; display:flex; justify-content:space-between;}
+
+  footer{margin-top:22px; font-size:11px; color:var(--muted); text-align:center; font-family:var(--mono);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="brand-mark">SS</div>
+      <div>
+        <h1>SectorShare ISAC</h1>
+        <p>threat intel sharing hub · simulated member exchange</p>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="n" id="statMembers">4</div><div class="l">Members</div></div>
+      <div class="stat"><div class="n" id="statShared">0</div><div class="l">IOCs Shared</div></div>
+      <div class="stat"><div class="n" id="statAnon">0</div><div class="l">Anonymized</div></div>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <!-- SUBMISSION PANEL -->
+    <div class="panel">
+      <div class="panel-title"><span class="dot"></span>Member Submission</div>
+
+      <label>Submitting Member</label>
+      <select id="orgSelect">
+        <option>Aegis Regional Bank</option>
+        <option>Meridian Health Network</option>
+        <option>Coastal Energy Co-op</option>
+        <option>Vantage Telecom</option>
+      </select>
+
+      <label>Indicator Type</label>
+      <select id="iocType">
+        <option value="ipv4-addr">IPv4 Address</option>
+        <option value="domain-name">Domain</option>
+        <option value="file:hashes.SHA-256">File Hash (SHA-256)</option>
+        <option value="url">URL</option>
+      </select>
+
+      <label>Indicator Value</label>
+      <input id="iocValue" type="text" placeholder="e.g. 185.220.101.47">
+
+      <label>Threat Category</label>
+      <select id="category">
+        <option>Ransomware C2</option>
+        <option>Phishing Infrastructure</option>
+        <option>Malware Delivery</option>
+        <option>Credential Harvesting</option>
+        <option>Scanning / Recon</option>
+      </select>
+
+      <label>TLP Marking</label>
+      <div class="tlp-row" id="tlpRow">
+        <div class="tlp-btn" data-tlp="RED">TLP:RED</div>
+        <div class="tlp-btn active" data-tlp="AMBER">TLP:AMBER</div>
+        <div class="tlp-btn" data-tlp="GREEN">TLP:GREEN</div>
+        <div class="tlp-btn" data-tlp="CLEAR">TLP:CLEAR</div>
+      </div>
+
+      <button class="submit-btn" id="submitBtn">Submit to ISAC</button>
+      <div class="hint" id="tlpHint">AMBER: shared with members on a need-to-know basis; source organization is anonymized on distribution.</div>
+    </div>
+
+    <!-- PIPELINE PANEL -->
+    <div class="panel">
+      <div class="panel-title"><span class="dot"></span>Sharing Pipeline</div>
+      <div class="pipeline" id="pipeline">
+        <div class="stage" data-stage="0"><div class="idx">1</div><div class="txt"><b>Submitted</b><span>Received from member organization</span></div></div>
+        <div class="stage" data-stage="1"><div class="idx">2</div><div class="txt"><b>Validated</b><span>Deduplicated &amp; checked against existing feed</span></div></div>
+        <div class="stage" data-stage="2"><div class="idx">3</div><div class="txt"><b>TLP-Tagged</b><span>Distribution rules applied per marking</span></div></div>
+        <div class="stage" data-stage="3"><div class="idx">4</div><div class="txt"><b>Anonymized</b><span>Source identity stripped where TLP requires</span></div></div>
+        <div class="stage" data-stage="4"><div class="idx">5</div><div class="txt"><b>Published</b><span>Distributed to member feed as STIX bundle</span></div></div>
+      </div>
+      <div class="panel-title" style="margin-top:4px;"><span class="dot"></span>STIX 2.1 Bundle Output</div>
+      <div class="bundle-box" id="bundleBox"><span class="empty-note">Submit an indicator to generate its STIX bundle here.</span></div>
+    </div>
+
+    <!-- FEED PANEL -->
+    <div class="panel">
+      <div class="panel-title"><span class="dot"></span>Live Shared Feed</div>
+      <div class="feed-list" id="feedList">
+        <div class="empty-note">No indicators published yet. The shared feed will populate here as members submit intel.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>CY376 — Designing a Threat Intelligence Sharing Process with Industry Peers (ISAC Model) · simulated data only, no live systems</footer>
+</div>
+
+<script>
+let tlp = "AMBER";
+let sharedCount = 0, anonCount = 0;
+
+const tlpHints = {
+  RED: "RED: not shared with the ISAC feed. Restricted to the specific recipients in the original exchange.",
+  AMBER: "AMBER: shared with members on a need-to-know basis; source organization is anonymized on distribution.",
+  GREEN: "GREEN: shared across the full ISAC membership; source organization is attributed.",
+  CLEAR: "CLEAR: unrestricted, may be shared publicly; source organization is attributed."
+};
+
+document.querySelectorAll('.tlp-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tlp-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    tlp = btn.dataset.tlp;
+    document.getElementById('tlpHint').textContent = tlpHints[tlp];
+  });
+});
+
+function randHex(len){
+  const chars = "0123456789abcdef";
+  let s = "";
+  for(let i=0;i<len;i++) s += chars[Math.floor(Math.random()*16)];
+  return s;
+}
+
+function stixPattern(type, val){
+  if(type === "ipv4-addr") return `[ipv4-addr:value = '${val}']`;
+  if(type === "domain-name") return `[domain-name:value = '${val}']`;
+  if(type === "url") return `[url:value = '${val}']`;
+  return `[file:hashes.'SHA-256' = '${val}']`;
+}
+
+async function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+async function runPipeline(){
+  const stages = document.querySelectorAll('.stage');
+  for(const s of stages) s.classList.remove('live');
+  for(const s of stages){
+    s.classList.add('live');
+    await sleep(260);
+  }
+}
+
+document.getElementById('submitBtn').addEventListener('click', async ()=>{
+  const org = document.getElementById('orgSelect').value;
+  const type = document.getElementById('iocType').value;
+  let val = document.getElementById('iocValue').value.trim();
+  const category = document.getElementById('category').value;
+
+  if(!val){
+    if(type==="ipv4-addr") val = `185.220.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
+    else if(type==="domain-name") val = `secure-update-${randHex(4)}.net`;
+    else if(type==="url") val = `hxxp://portal-verify-${randHex(4)}.com/login`;
+    else val = randHex(64);
+    document.getElementById('iocValue').value = val;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = "Processing…";
+
+  await runPipeline();
+
+  const id = "indicator--" + randHex(8)+"-"+randHex(4)+"-"+randHex(4)+"-"+randHex(4)+"-"+randHex(12);
+  const created = new Date().toISOString();
+  const anonymize = (tlp === "AMBER");
+  const attributedOrg = anonymize ? "REDACTED (ISAC-anonymized)" : org;
+
+  if(tlp === "RED"){
+    document.getElementById('bundleBox').innerHTML =
+      `<span class="muted">TLP:RED — not eligible for ISAC-wide distribution.\nRestricted to bilateral exchange with named recipients only.\nNo bundle published to shared feed.</span>`;
+    btn.disabled = false; btn.textContent = "Submit to ISAC";
+    return;
+  }
+
+  const bundle =
+`{
+  "type": "indicator",
+  "spec_version": "2.1",
+  "id": "${id}",
+  "created": "${created}",
+  "pattern": "${stixPattern(type, val)}",
+  "pattern_type": "stix",
+  "valid_from": "${created}",
+  "labels": ["${category.toLowerCase().replace(/ /g,'-')}"],
+  "confidence": 75,
+  "object_marking_refs": ["marking-definition--tlp-${tlp.toLowerCase()}"],
+  "x_isac_source": "${attributedOrg}"
+}`;
+  document.getElementById('bundleBox').textContent = bundle;
+
+  sharedCount++;
+  if(anonymize) anonCount++;
+  document.getElementById('statShared').textContent = sharedCount;
+  document.getElementById('statAnon').textContent = anonCount;
+
+  const feedList = document.getElementById('feedList');
+  if(sharedCount === 1) feedList.innerHTML = "";
+  const item = document.createElement('div');
+  item.className = 'feed-item';
+  item.innerHTML = `
+    <div class="feed-top">
+      <span class="badge ${tlp}">TLP:${tlp}</span>
+      <span class="feed-time">${new Date().toLocaleTimeString()}</span>
+    </div>
+    <div class="feed-val">${val}</div>
+    <div class="feed-meta"><span>${category}</span><span>${attributedOrg}</span></div>
+  `;
+  feedList.prepend(item);
+
+  btn.disabled = false; btn.textContent = "Submit to ISAC";
+  document.getElementById('iocValue').value = "";
+});
+</script>
+</body>
+</html>
